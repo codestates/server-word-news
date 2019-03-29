@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
   host     : 'wordnews-database.cbahr4yobiec.us-east-1.rds.amazonaws.com',
   user     : 'hee3',
-  password : '',
+  password : 'test',
   database : 'wordnews_database',
   port : 3306
 });
