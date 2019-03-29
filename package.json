@@ -1,0 +1,23 @@
+{
+  "name": "server-word-news",
+  "version": "1.0.0",
+  "description": "word-news-service",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "test": "npm run test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/david718/server-word-news.git"
+  },
+  "keywords": [
+    "wordnews"
+  ],
+  "author": "3hee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/david718/server-word-news/issues"
+  },
+  "homepage": "https://github.com/david718/server-word-news#readme"
+}
