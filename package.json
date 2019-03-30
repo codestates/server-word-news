@@ -22,10 +22,13 @@
   "homepage": "https://github.com/david718/server-word-news#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.4",
+    "https": "^1.0.0",
     "jsdom": "^14.0.0",
     "mysql": "^2.16.0",
-    "prettier": "^1.16.4"
+    "prettier": "^1.16.4",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "eslint": "^5.15.3",
