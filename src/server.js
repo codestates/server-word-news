@@ -1,8 +1,10 @@
+const password = require('../password.js');
+
 var mysql = require('mysql');
 var connection = mysql.createConnection({
   host     : 'wordnews-database.cbahr4yobiec.us-east-1.rds.amazonaws.com',
   user     : 'hee3',
-  password : '',
+  password : `${password}`,
   database : 'wordnews_database',
   port : 3306
 });
@@ -10,7 +12,7 @@ var connection = mysql.createConnection({
 var http = require('http');
 
 var port = 3000;
-var ip = '127.0.0.1';
+var ip = '0.0.0.0';
 
 function getUser () {
   return new Promise((resolve, reject) => {
@@ -33,6 +35,7 @@ var server = http.createServer(function (req, res) {
       getUser()
       .then(result => {
         console.log('getUser');
+        res.writeHead(200, headers);
         res.end(JSON.stringify(result));
       })
       .catch(err => {
