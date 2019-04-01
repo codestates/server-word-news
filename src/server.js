@@ -1,6 +1,30 @@
 const express = require('express');
-const password = require('../password.js');
-var mysql = require('mysql');
+const category = require('../router/category');
+const news = require('../router/news');
+const sign = require('../router/sign');
+const words = require('../router/words');
+const test = require('../router/test');
+const setting = require('../router/setting');
+
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+
+const mysql = require('mysql');
+
+var app = express();
+var ip = '0.0.0.0';
+var port = 3000;
+var headers = defaultCorsHeaders;
+
+//넘어오는 cookie 데이터를 JSON객체로 변환해주는 라이브러리
+app.use(cookieParser());
+
+//body로 넘어오는 데이터를 JSON 객체로 변환해주는 라이브러리
+app.use(bodyParser.JSON());
+
+// bodyParser.urlencoded({ extended }) - 중첩 객체를 허용할지 말지를 결정하는 옵션
+// 참고 링크(https://stackoverflow.com/questions/29960764/what-does-extended-mean-in-express-4-0/45690436#45690436)
+app.use(bodyParser.urlencoded({ extended: false }));
 
 var connection = mysql.createConnection({
   host: 'wordnews-database.cbahr4yobiec.us-east-1.rds.amazonaws.com',
@@ -9,11 +33,6 @@ var connection = mysql.createConnection({
   database: 'wordnews_database',
   port: 3306
 });
-
-var app = express();
-var ip = '0.0.0.0';
-var port = 3000;
-var headers = defaultCorsHeaders;
 
 function getUser() {
   return new Promise((resolve, reject) => {
@@ -39,43 +58,22 @@ app.get('/', function(req, res) {
     });
 });
 
-app.get('/user/:id', function(req, res) {
-  res.send('received a get request, param : ' + req.params.id);
-});
+app.use('/categoty', category);
+
+app.use('/news', news);
+
+//signin과 signup을 하나으 라우터로 묶기 위해 endpoint를 /sign/signup .. 으로 변경
+app.use('/sign', sign);
+
+app.use('/words', words);
+
+app.use('/test', test);
+
+app.use('/setting', setting);
 
 app.listen(port, ip, function() {
   console.log('Listening on http://' + ip + ':' + port);
 });
-
-// var http = require('http');
-
-// var port = 3000;
-// var ip = '0.0.0.0';
-
-// var server = http.createServer(function(req, res) {
-//
-//   var statusCode = 200;
-
-//   if (req.method === 'GET') {
-//     if (req.url === '/') {
-//       console.log('get');
-//       getUser()
-//         .then(result => {
-//           console.log('getUser');
-//           res.writeHead(200, headers);
-//           res.end(JSON.stringify(result));
-//         })
-//         .catch(err => {
-//           console.log(err);
-//         });
-//     }
-//   }
-// });
-// eslint-disable-next-line no-console
-//console.log('Listening on http://' + ip + ':' + port);
-//server.listen(port, ip);
-
-//module.exports = server;
 
 var defaultCorsHeaders = {
   'access-control-allow-origin': '*',
