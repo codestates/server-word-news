@@ -4,6 +4,7 @@ const xml2js = require('xml2js');
 const parser = new xml2js.Parser();
 const WordPOS = require('wordpos');
 const wordpos = new WordPOS();
+const stopWords = require('./stopwords');
 
 const fetchHelper = require('./fetch');
 
@@ -34,7 +35,6 @@ fetchHelper.retrieveS(krtSportsRss).then(xml => {
 
       sportsArticleData.push(articleData);
     });
-    console.log(sportsArticleData);
 
     let sportsSentenceData = [];
 
@@ -114,39 +114,53 @@ fetchHelper.retrieveS(krtSportsRss).then(xml => {
       return sentences;
     }
 
+    // 각 article별 sentencesData 가 완성된다
+
+    // ArticleUrlList.forEach(url => {
+    //   makeSentenceDataArray(url).then(result => {
+    //     let sentenceIndex = 0;
+    //     let sentencesData = result.map(sentence => {
+    //       sentenceIndex++;
+    //       return {
+    //         text: sentence,
+    //         article_id: 4,
+    //         index: sentenceIndex
+    //       };
+    //     });
+    //   });
+    //   // 각 article별 sentencesData 가 완성된다
+    // });
+
     let sportsWordData = [];
-
-    ArticleUrlList.forEach(url => {
-      makeSentenceDataArray(url).then(result => {
-        let sentenceIndex = 0;
-        let sentencesData = result.map(sentence => {
-          sentenceIndex++;
-          return {
-            text: sentence,
-            article_id: 4,
-            index: sentenceIndex
-          };
-        });
+    let word = {
+      id: 1,
+      word: 'great',
+      translation: '굉장함, 위대한, 큰',
+      grade: 1
+    };
+    //기사 하나만 word data 모으는 작업 이 함수에서 완성해라
+    makeSentenceDataArray(ArticleUrlList[0]).then(sentences => {
+      let words = [];
+      sentences.forEach(sentence => {
+        words = words.concat(sentence.split(' '));
       });
-      // 각 article별 sentencesData 가 완성된다
-    });
 
-    ArticleUrlList.forEach(url => {
-      makeSentenceDataArray(url).then(result => {
-        console.log(result);
+      words = words.filter(word => {
+        return !stopWords.includes(word);
       });
+      words = words.filter(word => {
+        return !(
+          word === '' ||
+          word[0].toUpperCase() === word[0] ||
+          word.split('').some(str => {
+            return '1234567890'.includes(str);
+          })
+        );
+      });
+
+      console.log(words);
     });
   });
 });
-
-// fetchHelper.retrieveArticle(nytRss).then(xml => {
-//   parser.parseString(xml, (err, result) => {
-//     let rssInformation = result.rss.channel[0];
-//     let rssArticleList = result.rss.channel[0].item;
-//     let ArticleUrlList = rssArticleList.map(article => {
-//       return article.link[0];
-//     });
-//   });
-// });
 
 module.exports = {};
