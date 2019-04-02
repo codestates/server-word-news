@@ -10,9 +10,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const cors = require('cors');
-const crypto = require('crypto');
 
-const mysql = require('mysql');
+//const mysql = require('mysql');
 const db = require('../models/index');
 
 var app = express();
@@ -51,15 +50,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
  */
 app.use(cors());
 
-/**
- * 비밀번호 hash에 추가로 넣을 salt카를 설정 express 자체에 세팅 app.set(key, value)
- */
-app.set('crypto-secret', 'saltkey');
-
+// var connection = mysql.createConnection({
+//   host     : 'wordnews-database.cbahr4yobiec.us-east-1.rds.amazonaws.com',
+//   user     : 'hee3',
+//   password : '',
+//   database : 'wordnews_database',
+//   port : 3306
+// });
 // function getUser() {
 //   return new Promise((resolve, reject) => {
 //     var sql = 'select * from User';
-
 //     connection.query(sql, function(err, result) {
 //       if (err) reject(err);
 //       resolve(result);
@@ -68,8 +68,9 @@ app.set('crypto-secret', 'saltkey');
 // }
 
 app.get('/', function(req, res) {
+  console.log(req.cookies.category);
   console.log('index page');
-  res.setHeader('content-type', 'application/jsons');
+  //res.setHeader('content-type', 'application/json');
   db.Article.findAll().then(result => {
     if (result) {
       res.status(200).json(result);
@@ -83,7 +84,6 @@ app.use('/api/category', category);
 
 app.use('/api/news', news);
 
-//signin과 signup을 하나의 라우터로 묶기 위해 endpoint를 /sign/signup .. 으로 변경
 app.use('/api/sign', sign);
 
 app.use('/api/words', words);
