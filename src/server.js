@@ -49,13 +49,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
  * cors() - CORS를 대응하기 위한 라이브러리 ( Access-Control-Allow-Origin: * )
  * https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
  */
-app.use(
-  cors({
-    origin: ['http://localhost:3000'],
-    methods: ['GET', 'POST', 'PUT'],
-    credentials: true
-  })
-);
+app.use(cors());
 
 /**
  * 비밀번호 hash에 추가로 넣을 salt카를 설정 express 자체에 세팅 app.set(key, value)
@@ -99,9 +93,9 @@ app.listen(port, ip, function() {
   console.log('Listening on http://' + ip + ':' + port);
 });
 
-var defaultCorsHeaders = {
-  'access-control-allow-origin': '*',
-  'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'access-control-allow-headers': 'content-type, accept',
-  'access-control-max-age': 10 // Seconds.
-};
+// var defaultCorsHeaders = {
+//   'access-control-allow-origin': '*',
+//   'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
+//   'access-control-allow-headers': 'content-type, accept',
+//   'access-control-max-age': 10 // Seconds.
+// };
