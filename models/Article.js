@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: true
       },
       photoURL: {
-        type: DataTypes.STRING(45),
+        type: DataTypes.TEXT,
         allowNull: true
       },
       publisher: {
