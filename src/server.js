@@ -69,25 +69,28 @@ app.set('crypto-secret', 'saltkey');
 
 app.get('/', function(req, res) {
   console.log('index page');
+  res.setHeader('content-type', 'application/jsons');
   db.Article.findAll().then(result => {
     if (result) {
-      res.status(200).send(JSON(result));
+      res.status(200).json(result);
+    } else {
+      res.sendStatus(204);
     }
   });
 });
 
-app.use('/category', category);
+app.use('/api/category', category);
 
-app.use('/news', news);
+app.use('/api//news', news);
 
 //signin과 signup을 하나의 라우터로 묶기 위해 endpoint를 /sign/signup .. 으로 변경
-app.use('/sign', sign);
+app.use('/api//sign', sign);
 
-app.use('/words', words);
+app.use('/api//words', words);
 
-app.use('/test', test);
+app.use('/api//test', test);
 
-app.use('/setting', setting);
+app.use('/api//setting', setting);
 
 app.listen(port, ip, function() {
   console.log('Listening on http://' + ip + ':' + port);

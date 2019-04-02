@@ -7,7 +7,8 @@ module.exports = function(sequelize, DataTypes) {
       id: {
         type: DataTypes.INTEGER(11),
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
       },
       title: {
         type: DataTypes.STRING(45),
@@ -26,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: true
       },
       photoURL: {
-        type: DataTypes.STRING(45),
+        type: DataTypes.TEXT,
         allowNull: true
       },
       publisher: {
