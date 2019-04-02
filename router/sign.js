@@ -15,9 +15,9 @@ router.post('/signup', function(req, res) {
     password: data.password,
     email: data.email,
     target_lang: data.target_lang,
-    user_lang: data.user_lang,
+    use_lang: data.use_lang,
     level: data.level,
-    categort_id: data.categort_id
+    category_id: data.category_id
   })
     .then(result => {
       res.status(200).send('Sucess');
