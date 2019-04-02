@@ -11,3 +11,4 @@ const config = {
     database: 'wordnews_database'
   }
 };
+
