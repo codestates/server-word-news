@@ -5,6 +5,7 @@ const sign = require('../router/sign');
 const words = require('../router/words');
 const test = require('../router/test');
 const setting = require('../router/setting');
+const db = require('../models/index');
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -20,19 +21,11 @@ var headers = defaultCorsHeaders;
 app.use(cookieParser());
 
 //body로 넘어오는 데이터를 JSON 객체로 변환해주는 라이브러리
-app.use(bodyParser.JSON());
+//app.use(bodyParser.JSON());
 
 // bodyParser.urlencoded({ extended }) - 중첩 객체를 허용할지 말지를 결정하는 옵션
 // 참고 링크(https://stackoverflow.com/questions/29960764/what-does-extended-mean-in-express-4-0/45690436#45690436)
 app.use(bodyParser.urlencoded({ extended: false }));
-
-var connection = mysql.createConnection({
-  host: 'wordnews-database.cbahr4yobiec.us-east-1.rds.amazonaws.com',
-  user: 'hee3',
-  password: `${password}`,
-  database: 'wordnews_database',
-  port: 3306
-});
 
 function getUser() {
   return new Promise((resolve, reject) => {
