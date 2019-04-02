@@ -18,7 +18,7 @@ const db = require('../models/index');
 var app = express();
 var ip = '0.0.0.0';
 var port = 3000;
-var headers = defaultCorsHeaders;
+//var headers = defaultCorsHeaders;
 
 /**
  * session(option)
@@ -71,7 +71,7 @@ app.get('/', function(req, res) {
   console.log('index page');
   db.Article.findAll().then(result => {
     if (result) {
-      res.status(200).send(result);
+      res.status(200).send(JSON(result));
     }
   });
 });
