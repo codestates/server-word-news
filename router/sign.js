@@ -1,24 +1,32 @@
 const express = require('express');
 const crypto = require('crypto');
-const { User } = require('../models/index');
+const db = require('../models/index');
 
 const router = express.Router();
+//const app = express();
+
+//app.set('crypto-secret', 'saltkey');
+
 router.post('/signup', function(req, res) {
   const data = req.body;
-  User.create({
-    user_name: user_name,
-    password: crypto
-      .createHmac('sha512', app.get('crypto-secret')) // hash 알고리즘 및 salt 설정
-      .update(data.password) // hashing 할 데이터
-      .digest('base64'), // 반환 값의 인코딩 방식
+  console.log(data.user_name);
+  db.User.create({
+    user_name: data.user_name,
+    password: data.password,
     email: data.email,
-    target_lang: target_lang,
-    user_lang: user_lang,
-    level: level,
-    categort_id: categort_id
-  });
+    target_lang: data.target_lang,
+    user_lang: data.user_lang,
+    level: data.level,
+    categort_id: data.categort_id
+  })
+    .then(result => {
+      res.status(200).send('Sucess');
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    });
   // 회원가입 정보를 저장하고 'Success'라는 문자열을 응답한다.
-  res.send('post sign up');
 });
 
 router.post('/signin', function(req, res) {

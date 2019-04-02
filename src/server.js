@@ -69,9 +69,12 @@ app.set('crypto-secret', 'saltkey');
 
 app.get('/', function(req, res) {
   console.log('index page');
+  res.setHeader('content-type', 'application/jsons');
   db.Article.findAll().then(result => {
     if (result) {
-      res.status(200).send(JSON(result));
+      res.status(200).json(result);
+    } else {
+      res.sendStatus(204);
     }
   });
 });
