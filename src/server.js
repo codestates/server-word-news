@@ -39,19 +39,11 @@ function getUser() {
 }
 
 app.get('/', function(req, res) {
-  console.log('get');
-  getUser()
-    .then(result => {
-      console.log('getUser');
-      res.writeHead(200, headers);
-      res.end(JSON.stringify(result));
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  console.log('index page');
+  res.send('hello word news');
 });
 
-app.use('/categoty', category);
+app.use('/category', category);
 
 app.use('/news', news);
 
