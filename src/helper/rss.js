@@ -1,14 +1,14 @@
 const express = require('express');
 const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
 const xml2js = require('xml2js');
 const parser = new xml2js.Parser();
 const WordPOS = require('wordpos');
 const wordpos = new WordPOS();
 const stopWords = require('./stopwords');
+const ngramData = require('./ngram');
 
 const fetchHelper = require('./fetch');
-
-const { JSDOM } = jsdom;
 
 const nytHotRss = 'http://rss.nytimes.com/services/xml/rss/nyt/AsiaPacific.xml'; // nyt rss 기사 가져오려면 fetch파일 수정해야함 http모듈 사용하도록!(https 는 krt);
 const krtSportsRss = 'https://www.koreatimes.co.kr/www/rss/sports.xml';
@@ -157,8 +157,40 @@ fetchHelper.retrieveS(krtSportsRss).then(xml => {
           })
         );
       });
+      words = words.filter(word => {
+        return !word.split('').includes("'");
+      });
+      words.forEach(word => {
+        if (word[word.length - 1] === '.') {
+          word = word.split('');
+          word.pop();
+          word = word.join('');
+        }
+      });
 
-      console.log(words);
+      words1 = words.slice(0, 49);
+      words2 = words.slice(50, 99);
+      words3 = words.slice(100, 149);
+      words4 = words.slice(149, words.length);
+      console.log(words1);
+
+      let wordNgram = {
+        ngram: 'succeeding',
+        type: 'NGRAM',
+        timeseries: [0.00004544414332485758, 0.00004544414332485758],
+        parent: ''
+      };
+
+      ngramData(words1).then(result => {
+        result[result.length - 1] = {
+          ngram: words1[words1.length - 1],
+          type: 'NGRAM',
+          timeseries: result[result.length - 2].timeseries, // 앞의 단어 grade
+          parent: ''
+        };
+
+        console.log(result);
+      });
     });
   });
 });
