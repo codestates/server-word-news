@@ -1,23 +1,22 @@
 const express = require('express');
 const crypto = require('crypto');
 const db = require('../models/index');
-
 const router = express.Router();
-//const app = express();
-
-//app.set('crypto-secret', 'saltkey');
 
 router.post('/signup', function(req, res) {
   const data = req.body;
   console.log(data.user_name);
   db.User.create({
     user_name: data.user_name,
-    password: data.password,
+    password: crypto
+      .createHmac('sha512', 'saltkey') // hash 알고리즘 및 salt 설정
+      .update(data.password) // hashing 할 데이터
+      .digest('base64'),
     email: data.email,
     target_lang: data.target_lang,
-    user_lang: data.user_lang,
+    use_lang: data.use_lang,
     level: data.level,
-    categort_id: data.categort_id
+    category_id: data.category_id
   })
     .then(result => {
       res.status(200).send('Sucess');
