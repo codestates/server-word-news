@@ -10,9 +10,9 @@ const fetchHelper = require('./fetch');
 const makeSentenceDataArray = require('./makeSentenceData');
 const getNgramData = require('./ngram');
 
-const krtSportsRss = 'https://www.koreatimes.co.kr/www/rss/sports.xml';
+const sportsRss = 'https://www.koreatimes.co.kr/www/rss/sports.xml';
 
-fetchHelper.retrieveS(krtSportsRss).then(xml => {
+fetchHelper.retrieveS(sportsRss).then(xml => {
   let sportsArticleData = [];
 
   parser.parseString(xml, async (err, result) => {
@@ -27,13 +27,13 @@ fetchHelper.retrieveS(krtSportsRss).then(xml => {
       let articleData = {};
       articleData.title = article.title[0];
       articleData.contenct = ''; //삭제해라 이따가
-      articleData.date = article.pubdate[0];
+      articleData.date = new Date();
       articleData.author = article.author[0];
       articleData.photoURL = article.enclosure
         ? article.enclosure[0].$.url
         : undefined;
       articleData.publisher = rssInformation.title[0];
-      articleData.category_id = rssInformation.description[0];
+      articleData.category_id = 1; //rssInformation.description[0];
 
       sportsArticleData.push(articleData);
     });
