@@ -82,14 +82,6 @@ app.get('/', function(req, res) {
 
 app.use('/api/category', category);
 
-<<<<<<< HEAD
-var defaultCorsHeaders = {
-  'access-control-allow-origin': '*',
-  'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'access-control-allow-headers': 'content-type, accept',
-  'access-control-max-age': 10 // Seconds.
-};
-=======
 app.use('/api/news', news);
 
 app.use('/api/sign', sign);
@@ -110,4 +102,3 @@ app.listen(port, ip, function() {
 //   'access-control-allow-headers': 'content-type, accept',
 //   'access-control-max-age': 10 // Seconds.
 // };
->>>>>>> 65590fd70e8f1bb23ff9b1fcc8aabf36307f4503

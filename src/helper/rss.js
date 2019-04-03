@@ -3,6 +3,7 @@ const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const xml2js = require('xml2js');
 const parser = new xml2js.Parser();
+const db = require('../../models/index');
 
 const stopWords = require('./stopwords');
 const fetchHelper = require('./fetch');
@@ -20,18 +21,26 @@ fetchHelper.retrieveS(krtSportsRss).then(xml => {
     let ArticleUrlList = rssArticleList.map(article => {
       return article.link[0];
     });
+    let article_id = 1;
 
     rssArticleList.forEach(article => {
       let articleData = {};
-
       articleData.title = article.title[0];
+      articleData.contenct = ''; //삭제해라 이따가
       articleData.date = article.pubdate[0];
       articleData.author = article.author[0];
-      articleData.photoURL = article.enclosure[0].$.url;
+      articleData.photoURL = article.enclosure
+        ? article.enclosure[0].$.url
+        : undefined;
       articleData.publisher = rssInformation.title[0];
       articleData.category_id = rssInformation.description[0];
 
       sportsArticleData.push(articleData);
+    });
+    console.log(sportsArticleData);
+
+    sportsArticleData.forEach(articleData => {
+      db.Article.create(articleData);
     });
 
     let sportsSentenceData = [];
