@@ -22,16 +22,10 @@
   "homepage": "https://github.com/david718/server-word-news#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-<<<<<<< HEAD
     "cheerio": "^1.0.0-rc.2",
-    "express": "^4.16.4",
     "https": "^1.0.0",
-    "jsdom": "^14.0.0",
-    "mysql": "^2.16.0",
-    "prettier": "^1.16.4",
     "request": "^2.88.0",
-    "xml2js": "^0.4.19"
-=======
+    "xml2js": "^0.4.19",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "express": "^4.16.4",
@@ -42,7 +36,6 @@
     "prettier": "^1.16.4",
     "sequelize": "^5.2.8",
     "sequelize-cli": "^5.4.0"
->>>>>>> 65590fd70e8f1bb23ff9b1fcc8aabf36307f4503
   },
   "devDependencies": {
     "eslint": "^5.15.3",

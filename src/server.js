@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-const password = require('../password.js');
-
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-  host: 'wordnews-database.cbahr4yobiec.us-east-1.rds.amazonaws.com',
-  user: 'hee3',
-  password: `${password}`,
-  database: 'wordnews_database',
-  port: 3306
-});
-=======
 const express = require('express');
 const category = require('../router/category');
 const news = require('../router/news');
@@ -17,47 +5,12 @@ const sign = require('../router/sign');
 const words = require('../router/words');
 const test = require('../router/test');
 const setting = require('../router/setting');
->>>>>>> 65590fd70e8f1bb23ff9b1fcc8aabf36307f4503
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const cors = require('cors');
 
-<<<<<<< HEAD
-var port = 3000;
-var ip = '0.0.0.0';
-
-function getUser() {
-  return new Promise((resolve, reject) => {
-    var sql = 'select * from User';
-
-    connection.query(sql, function(err, result) {
-      if (err) reject(err);
-      resolve(result);
-    });
-  });
-}
-
-var server = http.createServer(function(req, res) {
-  var headers = defaultCorsHeaders;
-  var statusCode = 200;
-
-  if (req.method === 'GET') {
-    if (req.url === '/') {
-      console.log('get');
-      getUser()
-        .then(result => {
-          console.log('getUser');
-          res.writeHead(200, headers);
-          res.end(JSON.stringify(result));
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-  }
-=======
 //const mysql = require('mysql');
 const db = require('../models/index');
 
@@ -125,7 +78,6 @@ app.get('/', function(req, res) {
       res.sendStatus(204);
     }
   });
->>>>>>> 65590fd70e8f1bb23ff9b1fcc8aabf36307f4503
 });
 
 app.use('/api/category', category);
