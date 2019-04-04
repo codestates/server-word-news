@@ -30,17 +30,6 @@ async function makeSentenceDataArray(url) {
         sentences = sentences.concat(statement.split('.'));
       }
     });
-    sentences.forEach(item => {
-      if (item.includes("'")) {
-        //정규 표현식
-      }
-      //item에서 역슬래시 제거해야한다
-      //prettier 때문에 저장하면 "\'"에서 "'"으로 자동 수정된다
-      //그래서 includes("\'")로해서 item을 걸러낼 수가 없다
-      //그래서 역슬래시를 제거 못하고 있다
-      //어떻게하지?
-      // console.log(item);
-    });
 
     for (let i = 0; i < sentences.length; i++) {
       if (!(sentences[i] === '' || sentences[i] === ' ')) {
@@ -68,15 +57,24 @@ async function makeSentenceDataArray(url) {
       return typeof sentence === 'string';
     });
     sentences = sentences.map(sentence => {
-      return sentence.trim();
+      return {
+        text: sentence.trim(),
+        article_id: '',
+        index: ''
+      };
     });
     for (let i = 0; i < sentences.length; i++) {
       if (sentences[i] === '' && sentences[i + 1] === '') {
         sentences.splice(i, 1);
       }
     }
+    console.log(sentences);
     res(sentences);
   });
 }
+
+makeSentenceDataArray(
+  'http://www.koreatimes.co.kr/www/nation/2019/04/281_266535.html'
+);
 
 module.exports = makeSentenceDataArray;
