@@ -20,7 +20,6 @@ async function crawler() {
       }
     });
     let categoryId = categoryDataIn[0].dataValues.id;
-
     let xml = await fetchHelper.retrieve(rss[rssKey]);
 
     parser.parseString(xml, async (err, result) => {
@@ -68,7 +67,9 @@ async function crawler() {
             if (
               word[word.length - 1] === '.' ||
               word[word.length - 1] === ',' ||
-              word[word.length - 1] === ')'
+              word[word.length - 1] === ')' ||
+              word[word.length - 1] === ':' ||
+              word[word.length - 1] === ';'
             ) {
               word = word.split('');
               word.pop();
@@ -79,7 +80,7 @@ async function crawler() {
               word = word.join('');
             } else if (
               word[word.length - 1] === '"' &&
-              word[word.length - 2] === '.'
+              (word[word.length - 2] === '.' || word[word.length - 2] === ',')
             ) {
               word = word.split('');
               word.pop();
@@ -92,63 +93,34 @@ async function crawler() {
             return !stopWords.includes(word);
           });
 
+          let ngramResult = await getNgramData(words);
+
           wordsData = words.map(async word => {
-            return {
+            let wordData = {
               word: word,
               translation: '',
-              ngram: '',
               grade: '',
               setence_id: sentenceId
             };
+            for (let i = 0; i < ngramResult.length; i++) {
+              if (ngramResult[i].ngram === word) {
+                let ngram = ngramResult[i].timeseries[0];
+                let grade = 5;
+                if (0.0000009 < ngram && ngram <= 0.000007) {
+                  grade = 4;
+                } else if (0.000007 < ngram && ngram <= 0.00002) {
+                  grade = 3;
+                } else if (0.00002 < ngram && ngram <= 0.0001) {
+                  grade = 2;
+                } else if (0.0001 < ngram) {
+                  grade = 1;
+                }
+                wordData.grade = grade;
+              }
+            }
+            let wordDataIn = await db.Word.create(wordData);
+            return wordData;
           });
-
-          // let wordsCopy = [...words];
-          // let index = 0;
-          // let ngramWordsList = [];
-
-          // while (wordsCopy.length > 0) {
-          //   if (wordsCopy.length <= 50) {
-          //     ngramWordsList[index] = [...wordsCopy];
-          //   } else {
-          //     ngramWordsList[index] = wordsCopy.slice(0, 50);
-          //   }
-          //   wordsCopy = wordsCopy.slice(50);
-          //   index++;
-          // }
-
-          // let ngramWordsOutput = [];
-          // ngramWordsList.forEach(words => {
-          //   let result = getNgramData(words);
-          //   ngramWordsOutput.push(result);
-          // });
-
-          // let ngramResult = await Promise.all(ngramWordsOutput);
-          // ngramResult = ngramResult.reduce((acc, item) => {
-          //   acc = acc.concat(item);
-          //   return acc;
-          // }, []);
-
-          // let ngramWords = ngramResult.map(wordData => {
-          //   let ngram = wordData.timeseries[0];
-          //   let grade = 5;
-          //   if (0.0000009 < ngram && ngram <= 0.000007) {
-          //     grade = 4;
-          //   } else if (0.000007 < ngram && ngram <= 0.00002) {
-          //     grade = 3;
-          //   } else if (0.00002 < ngram && ngram <= 0.0001) {
-          //     grade = 2;
-          //   } else if (0.0001 < ngram) {
-          //     grade = 1;
-          //   }
-
-          //   return {
-          //     word: wordData.ngram,
-          //     translation: '',
-          //     ngram: ngram,
-          //     grade: grade,
-          //     setence_id: 1
-          //   };
-          // });
         });
       });
     });
