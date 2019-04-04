@@ -9,7 +9,6 @@ async function makeSentenceDataArray(url) {
 
     let statementTags = dom.window.document.querySelector('#startts').children;
     let statements = [];
-
     for (let key in statementTags) {
       if (
         statementTags[key].tagName === 'SPAN' ||
@@ -52,6 +51,17 @@ async function makeSentenceDataArray(url) {
         }
       }
     }
+
+    sentences.forEach((sentence, i) => {
+      if (sentences[i] === '' && sentences[i + 1] === '') {
+        sentences.splice(i, 1);
+      }
+    });
+    sentences.forEach((sentence, i) => {
+      if (sentences[i] === '' && sentences[i + 1] === '') {
+        sentences.splice(i, 1);
+      }
+    });
 
     sentences = sentences.filter(sentence => {
       return typeof sentence === 'string';
