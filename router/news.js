@@ -1,9 +1,17 @@
 const express = require('express');
+const db = require('../models/index');
+
 const router = express.Router();
 
 router.get('/', function(req, res) {
   //카테고리에 맞는 기사목록과 ngram을 응답한다
-  res.send('get news');
+  db.Article.findAll({
+    where: {
+      category_id: req.cookies.categoryId
+    }
+  }).then(result => {
+    res.json(result);
+  });
 });
 
 router.get('/:article_id', function(req, res) {

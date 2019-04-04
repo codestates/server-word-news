@@ -11,10 +11,6 @@ module.exports = function(sequelize, DataTypes) {
         autoIncrement: true
       },
       title: {
-        type: DataTypes.STRING(45),
-        allowNull: true
-      },
-      content: {
         type: DataTypes.TEXT,
         allowNull: true
       },
@@ -28,10 +24,6 @@ module.exports = function(sequelize, DataTypes) {
       },
       photoURL: {
         type: DataTypes.TEXT,
-        allowNull: true
-      },
-      publisher: {
-        type: DataTypes.STRING(45),
         allowNull: true
       },
       category_id: {
