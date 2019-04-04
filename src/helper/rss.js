@@ -14,6 +14,7 @@ const makeSentenceDataArray = require('./makeSentenceData');
 async function crawler() {
   Object.keys(rss).forEach(async key => {
     let xml = await fetchHelper.retrieve(rss[key]);
+    console.log(key);
 
     let category = await db.Category.create({
       name: key
@@ -37,32 +38,35 @@ async function crawler() {
         };
 
         artilesData.push(articleData);
-      });
-      // articleData를 DB에 저장하기 위치 아래로 옮겨라
-      // artilesData.forEach(articleData => {
-      //   db.Article.create(articleData);
-      // });
 
-      /////articledata@@@ 처리하는것
-      rssArticleList.forEach(async article => {
+        let articleResult = await db.Article.create(articleData);
+
+        console.log(article);
+
+        // articleData를 DB에 저장하기 위치 아래로 옮겨라
+        // artilesData.forEach(articleData => {
+        //   db.Article.create(articleData);
+        // });
+
+        /////articledata@@@ 처리하는것
+
         // 여기서 article data를 db에 저장해라
         // 그 create의 return 값에서 article id 꺼내와라
         // 그걸로 돌려라
         let url = article.link[0];
         let sentenceIndex = 0;
-        let sentences = await makeSentenceDataArray(url);
-        let sentencesData = sentences.map(sentence => {
-          sentence.index = sentenceIndex;
-          sentence.article_id = 3;
+        let sentencesData = await makeSentenceDataArray(url);
+        sentencesData.forEach(sentenceData => {
+          sentenceData.index = sentenceIndex;
+          sentenceData.article_id = 3; // 여기서 then 값으로 article table 해라
 
           sentenceIndex++;
-          return sentence;
         });
 
         let wordsData = [];
         let words = [];
 
-        sentences.forEach(sentence => {
+        sentencesData.forEach(sentence => {
           // let wordList = sentence.split(' ');
           // wordList = wordList.map(word => {
           //   return;
@@ -143,17 +147,6 @@ async function crawler() {
           };
         });
 
-        function getWordMeaning(word) {
-          return new Promise(async (res, rej) => {
-            let url = `https://dict.naver.com/search.nhn?dicQuery=${word}&x=0&y=0&query=${word}&target=dic&ie=utf8&query_utf=&isOnlyViewEE=`;
-            let html = await fetchHelper.retrieveS(url);
-            let dom = new JSDOM(html);
-            let meaning = dom.window.document.querySelector(
-              '.dic_search_result'
-            ).children[1].textContent;
-            res(meaning);
-          });
-        }
         // let wordsData = ngramWords.map(async wordData => {
         //   let meaning = await getWordMeaning(wordData.word);
         //   wordData.translation = meaning;

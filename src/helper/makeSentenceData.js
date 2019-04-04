@@ -68,13 +68,8 @@ async function makeSentenceDataArray(url) {
         sentences.splice(i, 1);
       }
     }
-    console.log(sentences);
     res(sentences);
   });
 }
-
-makeSentenceDataArray(
-  'http://www.koreatimes.co.kr/www/nation/2019/04/281_266535.html'
-);
 
 module.exports = makeSentenceDataArray;
