@@ -6,8 +6,10 @@ const parser = new xml2js.Parser();
 const db = require('../../models/index');
 
 const fetchHelper = require('./fetch');
+const getGrade = require('./grade');
 const rss = require('./rssData');
 const stopWords = require('./stopwords');
+const wordsFilter = require('./wordsFilter');
 const getNgramData = require('./ngram');
 const makeSentenceDataArray = require('./makeSentenceData');
 
@@ -43,78 +45,28 @@ async function crawler() {
 
         sentencesData.forEach(async sentenceData => {
           sentenceData.index = sentenceIndex;
-          sentenceData.article_id = articleId; // 여기서 then 값으로 article table 해라
+          sentenceData.article_id = articleId;
           sentenceIndex++;
 
           let sentenceDataIn = await db.Sentence.create(sentenceData);
           let sentenceId = sentenceDataIn.dataValues.id;
-          let words = sentenceDataIn.dataValues.text.split(' ');
+          let beforeWords = sentenceDataIn.dataValues.text.split(' ');
 
-          words = words.filter(word => {
-            return !word.split('').includes("'");
-          });
-          words = words.filter(word => {
-            return !(
-              word === '' ||
-              word[0].toUpperCase() === word[0] ||
-              word.split('').some(str => {
-                return '1234567890'.includes(str);
-              })
-            );
-          });
-          for (let i = 0; i < words.length; i++) {
-            let word = words[i];
-            if (
-              word[word.length - 1] === '.' ||
-              word[word.length - 1] === ',' ||
-              word[word.length - 1] === ')' ||
-              word[word.length - 1] === ':' ||
-              word[word.length - 1] === ';'
-            ) {
-              word = word.split('');
-              word.pop();
-              word = word.join('');
-            } else if (word[0] === '.' || word[0] === ',' || word[0] === '(') {
-              word = word.split('');
-              word.unshift();
-              word = word.join('');
-            } else if (
-              word[word.length - 1] === '"' &&
-              (word[word.length - 2] === '.' || word[word.length - 2] === ',')
-            ) {
-              word = word.split('');
-              word.pop();
-              word.pop();
-              word = word.join('');
-            }
-            words[i] = word;
-          }
-          words = words.filter(word => {
-            return !stopWords.includes(word);
-          });
+          let words = wordsFilter(beforeWords);
 
           let ngramResult = await getNgramData(words);
 
-          wordsData = words.map(async word => {
+          words.forEach(async word => {
             let wordData = {
               word: word,
               translation: '',
               grade: '',
-              setence_id: sentenceId
+              sentence_id: sentenceId
             };
             for (let i = 0; i < ngramResult.length; i++) {
               if (ngramResult[i].ngram === word) {
                 let ngram = ngramResult[i].timeseries[0];
-                let grade = 5;
-                if (0.0000009 < ngram && ngram <= 0.000007) {
-                  grade = 4;
-                } else if (0.000007 < ngram && ngram <= 0.00002) {
-                  grade = 3;
-                } else if (0.00002 < ngram && ngram <= 0.0001) {
-                  grade = 2;
-                } else if (0.0001 < ngram) {
-                  grade = 1;
-                }
+                let grade = getGrade(ngram);
                 wordData.grade = grade;
               }
             }
