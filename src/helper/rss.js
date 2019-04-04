@@ -16,10 +16,6 @@ async function crawler() {
     let xml = await fetchHelper.retrieve(rss[key]);
     console.log(key);
 
-    let category = await db.Category.create({
-      name: key
-    });
-
     let artilesData = [];
 
     parser.parseString(xml, async (err, result) => {
@@ -34,7 +30,7 @@ async function crawler() {
           author: article.author[0],
           photoURL: article.enclosure ? article.enclosure[0].$.url : undefined,
           publisher: rssInformation.title[0],
-          category_id: category.dataValues.id
+          category_id: 1
         };
 
         artilesData.push(articleData);
