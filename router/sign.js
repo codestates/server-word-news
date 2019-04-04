@@ -1,6 +1,9 @@
 const express = require('express');
 const crypto = require('crypto');
 const db = require('../models/index');
+const jwt = require('jsonwebtoken');
+const secretObj = require('../config/jwt');
+
 const router = express.Router();
 
 router.post('/signup', function(req, res) {
@@ -29,8 +32,30 @@ router.post('/signup', function(req, res) {
 });
 
 router.post('/signin', function(req, res) {
+  //default : hmac sha256
+  let token = jwt.sign(
+    {
+      id: req.body.id
+    },
+    secretObj.secret,
+    { expiresIn: '10m' }
+  );
+
+  db.User.findOne({
+    where: {
+      user_name: req.body.id
+    }
+  }).then(user => {
+    // console.log(user);
+    if (user.password === req.body.password) {
+      res.cookie('user', token);
+      res.json({
+        token: token
+      });
+    }
+  });
   // 로그인 정보를 확인하여 'Success'라는 문자열을 응답한다.
-  res.send('post sign in');
+  //res.send('Success');
 });
 
 module.exports = router;
