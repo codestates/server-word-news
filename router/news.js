@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', function(req, res) {
   //카테고리에 맞는 기사목록과 ngram을 응답한다
-  db.Article.findOne({
+  db.Article.findAll({
     where: {
       category_id: req.cookies.categoryId
     }
