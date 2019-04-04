@@ -18,7 +18,7 @@ if (config.use_env_variable) {
   );
 }
 
-sequelize.sync({ force: true });
+sequelize.sync();
 
 fs.readdirSync(__dirname)
   .filter(file => {

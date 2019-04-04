@@ -13,8 +13,14 @@ const makeSentenceDataArray = require('./makeSentenceData');
 
 async function crawler() {
   Object.keys(rss).forEach(async key => {
+    let categoryId = await db.Category.findAll({
+      where: {
+        name: key
+      }
+    });
+    console.log(categoryId);
+
     let xml = await fetchHelper.retrieve(rss[key]);
-    console.log(key);
 
     let artilesData = [];
 
@@ -30,7 +36,7 @@ async function crawler() {
           author: article.author[0],
           photoURL: article.enclosure ? article.enclosure[0].$.url : undefined,
           publisher: rssInformation.title[0],
-          category_id: 1
+          category_id: categoryId
         };
 
         artilesData.push(articleData);
