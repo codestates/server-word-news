@@ -13,11 +13,14 @@ router.get('/', function(req, res) {
   });
 });
 
-let category_id;
+let categoryId;
 router.post('/', function(req, res) {
   //선택된 카테고리id를 저장하고 'Success'라는 문자열을 응답한다.
-  category_id = req.body.category_id;
-  res.cookie('category', category_id).send('cookie : ' + category_id);
+  console.log(req.cookies);
+  categoryId = req.body.categoryId;
+  res
+    .cookie('categoryId', categoryId)
+    .send('cookies.categoryId = ' + categoryId);
 });
 
 module.exports = router;
