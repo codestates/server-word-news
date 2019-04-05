@@ -1,8 +1,5 @@
 const express = require('express');
 const db = require('../models/index');
-const jwt = require('jsonwebtoken');
-const secretObj = require('../config/jwt');
-const getMeaning = require('../src/crawler/helper/getMeaning.js');
 const router = express.Router();
 
 Date.prototype.yyyymmdd = function() {
