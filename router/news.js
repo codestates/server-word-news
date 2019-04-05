@@ -10,13 +10,24 @@ router.get('/', function(req, res) {
       category_id: req.cookies.categoryId
     }
   }).then(result => {
-    res.json(result);
+    res.status(200).res.json(result);
   });
 });
 
 router.get('/:article_id', function(req, res) {
   //선택된 기사의 본문과 추천 단어를 응답한다.
-  res.send('get news article id : ' + req.params.article_id);
+  let newsContent = {};
+  db.Sentence.findAll({
+    where: {
+      article_id: req.params.article_id
+    }
+  }).then(sentences => {
+    newsContent.article = sentences;
+    //res.json(newsContent);
+    db.Sentence.findAll({ attributes: ['id'] }).then(result => {
+      res.json(result);
+    });
+  });
 });
 
 // ?뒤에 쿼리가져올 수 없어서 :word_id로 수정
