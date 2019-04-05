@@ -17,15 +17,38 @@ router.get('/', function(req, res) {
 router.get('/:article_id', function(req, res) {
   //선택된 기사의 본문과 추천 단어를 응답한다.
   let newsContent = {};
-  db.Sentence.findAll({
+  db.Article.findOne({
     where: {
-      article_id: req.params.article_id
-    }
-  }).then(sentences => {
-    newsContent.article = sentences;
-    //res.json(newsContent);
-    db.Sentence.findAll({ attributes: ['id'] }).then(result => {
-      res.json(result);
+      id: req.params.article_id
+    },
+    raw: true
+  }).then(article => {
+    newsContent.article = article;
+    db.Sentence.findAll({
+      where: {
+        article_id: req.params.article_id
+      },
+      raw: true
+    }).then(sentences => {
+      let sentenceId = [];
+      for (var i = 0; i < sentences.length; i++) {
+        sentenceId.push(sentences[i].id);
+      }
+
+      newsContent.article.content = sentences;
+      db.Word.findAll({
+        where: {
+          sentence_id: sentenceId
+        },
+        raw: true
+      })
+        .then(words => {
+          newsContent.words = words;
+          console.log('senten');
+        })
+        .then(() => {
+          res.json(newsContent);
+        });
     });
   });
 });
