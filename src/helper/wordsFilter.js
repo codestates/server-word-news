@@ -1,3 +1,5 @@
+const stopWords = require('./stopwords');
+
 function wordsFilter(wordsArr) {
   let words = [...wordsArr];
   words = words.filter(word => {
