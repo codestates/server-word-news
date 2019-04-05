@@ -67,18 +67,23 @@ app.use(cors());
 //   });
 // }
 
-app.get('/', function(req, res) {
-  console.log(req.cookies.category);
-  console.log('index page');
-  //res.setHeader('content-type', 'application/json');
-  db.Article.findAll().then(result => {
-    if (result) {
-      res.status(200).json(result);
-    } else {
-      res.sendStatus(204);
-    }
-  });
-});
+//인덱스 페이지를 /news로 변경
+// app.get('/', function(req, res) {
+//   console.log(req.cookies.category);
+//   console.log('index page');
+//   //res.setHeader('content-type', 'application/json');
+//   db.Article.findAll({
+//     where: {
+//       category_id: 0
+//     }
+//   }).then(result => {
+//     if (result) {
+//       res.status(200).json(result);
+//     } else {
+//       res.sendStatus(204);
+//     }
+//   });
+// });
 
 app.use('/api/category', category);
 

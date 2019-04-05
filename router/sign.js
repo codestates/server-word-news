@@ -18,11 +18,11 @@ router.post('/signup', function(req, res) {
     email: data.email,
     target_lang: data.target_lang,
     use_lang: data.use_lang,
-    level: data.level,
-    category_id: req.cookies.categoryId
+    level: parseInt(req.cookies.level),
+    category_id: parseInt(req.cookies.categoryId)
   })
     .then(result => {
-      res.status(200).send('Sucess');
+      res.status(200).send(result);
     })
     .catch(err => {
       console.log(err);

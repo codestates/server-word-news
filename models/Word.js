@@ -18,11 +18,11 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING(45),
         allowNull: true
       },
-      ngram: {
-        type: 'DOUBLE',
+      grade: {
+        type: DataTypes.INTEGER(11),
         allowNull: true
       },
-      grade: {
+      sentence_id: {
         type: DataTypes.INTEGER(11),
         allowNull: true
       }
