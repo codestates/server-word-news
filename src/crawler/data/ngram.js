@@ -1,4 +1,4 @@
-const fetchHelper = require('./fetch');
+const fetchHelper = require('../helper/fetch');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
