@@ -7,10 +7,10 @@ router.get('/', function(req, res) {
   //카테고리에 맞는 기사목록과 ngram을 응답한다
   db.Article.findAll({
     where: {
-      category_id: req.cookies.categoryId
+      category_id: Number(req.query.categoryId)
     }
   }).then(result => {
-    res.status(200).res.json(result);
+    res.status(200).json(result);
   });
 });
 
