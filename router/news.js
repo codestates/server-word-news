@@ -2,7 +2,7 @@ const express = require('express');
 const db = require('../models/index');
 const jwt = require('jsonwebtoken');
 const secretObj = require('../config/jwt');
-const getMeaning = require('../src/crawler/helper/getMeaning');
+const getMeaning = require('../src/crawler/helper/getMeaning.js');
 const router = express.Router();
 
 Date.prototype.yyyymmdd = function() {
@@ -15,8 +15,6 @@ Date.prototype.yyyymmdd = function() {
     '-' + (dd > 9 ? '' : '0') + dd
   ].join('');
 };
-
-const router = express.Router();
 
 router.get('/', function(req, res) {
   //카테고리에 맞는 기사목록과 ngram을 응답한다
