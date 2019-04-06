@@ -26,7 +26,7 @@ router.post('/signup', function(req, res) {
     })
     .catch(err => {
       console.log(err);
-      res.sendStatus(500);
+      res.sendStatus(400);
     });
   // 회원가입 정보를 저장하고 'Success'라는 문자열을 응답한다.
 });
@@ -50,15 +50,20 @@ router.post('/signin', function(req, res) {
     where: {
       user_name: req.body.id
     }
-  }).then(user => {
-    // console.log(user);
-    if (user.password === userPassword) {
-      res.cookie('user', token);
-      res.json({
-        token: token
-      });
-    }
-  });
+  })
+    .then(user => {
+      // console.log(user);
+      if (user.password === userPassword) {
+        res.cookie('user', token);
+        res.json({
+          token: token
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400);
+    });
   //비밀번호 틀릴 시 처리 하기
   // 로그인 정보를 확인하여 'Success'라는 문자열을 응답한다.
   //res.send('Success');
