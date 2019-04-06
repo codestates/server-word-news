@@ -124,7 +124,7 @@ router.post('/:wordbook_id/:word_id', function(req, res) {
   res.send('change words id: ' + word_id);
 });
 
-router.get('/:wordbook_id/:word_id', async function(req, res) {
+router.post('/:wordbook_id/:word_id/sentence', async function(req, res) {
   // 단어장에서 선택한 단어의 뜻과 예문을 응답한다.
   let { Word, Book, Sentence } = db;
   let { word_id, wordbook_id } = req.params;
