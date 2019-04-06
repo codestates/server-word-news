@@ -5,57 +5,61 @@ const db = require('../models/index');
 
 const router = express.Router();
 
-router.get('/:date', function(req, res) {
+router.post('/', async function(req, res) {
   let token = req.body.token;
-
   let decoded = jwt.verify(token, secretObj.secret);
-  //console.log('aaaaaaaaaaaaaaaaaaaaaaaaa', decoded);
+
   if (decoded) {
-    if (req.params.date) {
-      //날짜값이 있을 때 날짜에 해당하는 단어만 보여줌
-    } else {
-      //날짜값이 없을 때 모두 보여줌
-      let user = await db.User.findOne({
-        where: {
-          user_name: decoded
-        }, 
-        raw:true
-      })
+    let user = await db.User.findOne({
+      where: {
+        user_name: decoded.id
+      }
+    }).catch(err => {
+      console.log(err);
+      res.sendStatus(400);
+    });
 
-      let user_id = user.id
+    let user_id = user.dataValues.id;
 
-      let books = await db.Book.findAll({
-        where:{
-          user_id : user_id
-        },
-        raw:true
-      })
+    let books = await db.Book.findAll({
+      where: {
+        user_id: user_id
+      }
+    }).catch(err => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaaa', books);
 
-      let book_id = [];
-      books.forEach(book =>{
-        book_id.push(book.id)
-      })
+    let book_id = [];
+    books.forEach(book => {
+      book_id.push(book.dataValues.id);
+    });
 
-      let bookWords = await db.Book_Word.findAll({
-        where:{
-          book_id: book_id
-        },
-        raw: true
-      })
+    let bookWords = await db.Book_Word.findAll({
+      where: {
+        book_id: book_id
+      }
+    }).catch(err => {
+      console.log(err);
+      res.sendStatus(400);
+    });
 
-      let word_id =[];
-      bookWords.forEach(bookWord=>{
-        word_id.push(bookWord.word_id)
-      })
+    let word_id = [];
+    bookWords.forEach(bookWord => {
+      word_id.push(bookWord.dataValues.word_id);
+    });
 
-      let words = await db.Word.findAll({
-        where: {
-          id: word_id
-        },
-        raw : true
-      })
-      res.send(words);
-    }
+    let words = await db.Word.findAll({
+      where: {
+        id: word_id
+      }
+    }).catch(err => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+
+    res.send(words);
   } else {
     res.status(400).send('로그인 하세요');
   }
