@@ -11,9 +11,14 @@ router.get('/', function(req, res) {
     where: {
       category_id: Number(req.query.categoryId)
     }
-  }).then(result => {
-    res.status(200).json(result);
-  });
+  })
+    .then(result => {
+      res.status(200).json(result);
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400);
+    });
 });
 
 router.get('/:article_id', function(req, res) {
@@ -24,35 +29,44 @@ router.get('/:article_id', function(req, res) {
       id: req.params.article_id
     },
     raw: true
-  }).then(article => {
-    newsContent.article = article;
-    db.Sentence.findAll({
-      where: {
-        article_id: req.params.article_id
-      },
-      raw: true
-    }).then(sentences => {
-      let sentenceId = [];
-      for (var i = 0; i < sentences.length; i++) {
-        sentenceId.push(sentences[i].id);
-      }
-
-      newsContent.article.content = sentences;
-      db.Word.findAll({
+  })
+    .then(article => {
+      newsContent.article = article;
+      db.Sentence.findAll({
         where: {
-          sentence_id: sentenceId
+          article_id: req.params.article_id
         },
         raw: true
-      })
-        .then(words => {
-          newsContent.words = words;
-          console.log('senten');
+      }).then(sentences => {
+        let sentenceId = [];
+        for (var i = 0; i < sentences.length; i++) {
+          sentenceId.push(sentences[i].id);
+        }
+
+        newsContent.article.content = sentences;
+        db.Word.findAll({
+          where: {
+            sentence_id: sentenceId
+          },
+          raw: true
         })
-        .then(() => {
-          res.json(newsContent);
-        });
+          .then(words => {
+            newsContent.words = words;
+            console.log('senten');
+          })
+          .then(() => {
+            res.json(newsContent);
+          })
+          .catch(err => {
+            console.log(err);
+            res.sendStatus(400);
+          });
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400);
     });
-  });
 });
 
 // ?뒤에 쿼리가져올 수 없어서 :word_id로 수정
@@ -65,12 +79,17 @@ router.get('/:article_id/:word', async function(req, res) {
   });
   let word = wordData.dataValues.word;
   let meaning = await getMeaning(req.params.word);
-  res.send({
-    word_id: req.params.word_id,
-    word: word,
-    translation: meaning,
-    sentence_id: wordData.dataValues.sentence_id
-  });
+  res
+    .send({
+      word_id: req.params.word_id,
+      word: word,
+      translation: meaning,
+      sentence_id: wordData.dataValues.sentence_id
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400);
+    });
 });
 
 router.post('/:article_id/word', async function(req, res) {
@@ -85,6 +104,9 @@ router.post('/:article_id/word', async function(req, res) {
     where: {
       user_name: decoded.id
     }
+  }).catch(err => {
+    console.log(err);
+    res.sendStatus(400);
   });
 
   let date1 = new Date();
@@ -95,6 +117,9 @@ router.post('/:article_id/word', async function(req, res) {
       user_id: userData.dataValues.id,
       date: date
     }
+  }).catch(err => {
+    console.log(err);
+    res.sendStatus(400);
   });
   if (bookData === null) {
     Book.create({
