@@ -2,17 +2,6 @@ const express = require('express');
 const db = require('../models/index');
 const router = express.Router();
 
-Date.prototype.yyyymmdd = function() {
-  var mm = this.getMonth() + 1;
-  var dd = this.getDate();
-
-  return [
-    this.getFullYear(),
-    '-' + (mm > 9 ? '' : '0') + mm,
-    '-' + (dd > 9 ? '' : '0') + dd
-  ].join('');
-};
-
 router.get('/', function(req, res) {
   //카테고리에 맞는 기사목록과 ngram을 응답한다
   db.Article.findAll({
