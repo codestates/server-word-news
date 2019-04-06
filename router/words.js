@@ -13,12 +13,12 @@ Date.prototype.yyyymmdd = function() {
   ].join('');
 };
 
-router.get('/:date', async function(req, res) {
+router.post('/:date', async function(req, res) {
   // date에 생성된 단어 목록을 응답한다.
 
   let bookData = await db.Book.findOne({
     where: {
-      date: req.params.date.yyyymmdd()
+      date: req.params.date
     }
   });
 
