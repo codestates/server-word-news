@@ -19,7 +19,7 @@ module.exports = function(sequelize, DataTypes) {
         }
       },
       date: {
-        type: DataTypes.DATEONLY,
+        type: DataTypes.STRING(45),
         allowNull: true
       }
     },
