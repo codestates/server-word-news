@@ -33,6 +33,15 @@ app.use(
     saveUninitialized: true
   })
 );
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  res.header('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 //넘어오는 cookie 데이터를 JSON객체로 변환해주는 라이브러리
 app.use(cookieParser());
