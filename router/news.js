@@ -31,7 +31,6 @@ router.post('/recommends', function(req, res) {
   //카테고리에 맞는 기사목록과 ngram을 응답한다
   let wordsArr = req.body;
   let meaningsArr = [];
-  console.log(wordsArr);
 
   wordsArr.forEach(async word => {
     meaningsArr.push(getMeaning(word));
@@ -100,11 +99,22 @@ router.get('/:article_id/:word', async function(req, res) {
 
 router.post('/:article_id/word', async function(req, res) {
   // 선택한 단어를 단어장에 저장하고 응답한다.
-  let token = req.cookies.user;
-  let word = req.body.word;
+  let { token, word, word_id, sentence_id, translation } = req.body.word;
 
   let decoded = jwt.verify(token, secretObj.secret);
   let { Book, User, Book_Word, Word } = db;
+  let wordData = await Word.find({
+    where: {
+      id: word_id
+    }
+  }).on('success', word => {
+    if (word) {
+      Word.update({
+        translation: translation
+      }).success(() => {});
+    }
+  });
+
   let userData = await User.findOne({
     //user_name 받아와서 id 찾는다
     where: {
