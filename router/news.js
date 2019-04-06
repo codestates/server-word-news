@@ -103,18 +103,17 @@ router.post('/:article_id/word', async function(req, res) {
 
   let decoded = jwt.verify(token, secretObj.secret);
   let { Book, User, Book_Word, Word } = db;
-  let wordData = await Word.findOne({
-    where: {
-      id: word_id
-    }
-  }).on('success', word => {
-    if (word) {
-      Word.update({
-        translation: translation
-      }).success(() => {});
-    }
-  });
 
+  let wordData = await Word.update(
+    {
+      translation: translation
+    },
+    {
+      where: {
+        id: word_id
+      }
+    }
+  );
   let userData = await User.findOne({
     //user_name 받아와서 id 찾는다
     where: {
