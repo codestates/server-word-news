@@ -43,7 +43,7 @@ router.post('/signin', function(req, res) {
       id: req.body.id
     },
     secretObj.secret,
-    { expiresIn: '10m' }
+    { expiresIn: '1000m' } // 이따 다시 수정해라
   );
 
   db.User.findOne({
