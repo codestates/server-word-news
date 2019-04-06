@@ -21,6 +21,20 @@ router.get('/', function(req, res) {
     });
 });
 
+router.post('/recommends', function(req, res) {
+  //카테고리에 맞는 기사목록과 ngram을 응답한다
+  let wordsArr = req.body;
+  let meaningsArr = [];
+  console.log(wordsArr);
+
+  wordsArr.forEach(async word => {
+    meaningsArr.push(getMeaning(word));
+  });
+  Promise.all(meaningsArr).then(meaningsArr => {
+    res.status(200).json(meaningsArr);
+  });
+});
+
 router.get('/:article_id', function(req, res) {
   //선택된 기사의 본문과 추천 단어를 응답한다.
   let newsContent = {};
