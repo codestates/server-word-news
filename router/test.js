@@ -29,7 +29,7 @@ router.post('/', async function(req, res) {
       console.log(err);
       res.sendStatus(400);
     });
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaa', books);
+    //console.log('aaaaaaaaaaaaaaaaaaaaaaaaa', books);
 
     let book_id = [];
     books.forEach(book => {
@@ -59,7 +59,39 @@ router.post('/', async function(req, res) {
       res.sendStatus(400);
     });
 
-    res.send(words);
+    let result = [];
+
+    for (let i = 0; i < words.length; i++) {
+      let quizWord = {
+        word: '',
+        translations: [],
+        answer: '',
+        grade: ''
+      };
+
+      let answer = Math.floor(Math.random() * 5);
+      quizWord.word = words[i].word;
+      quizWord.translations[answer] = words[i].translation;
+      quizWord.answer = answer;
+      quizWord.grade = words[i].grade;
+      result.push(quizWord);
+    }
+
+    for (let i = 0; i < result.length; i++) {
+      // let gradeWord = await db.Word.findAll({
+      //   grade: result[i].grade
+      // });
+
+      //console.log(gradeWord);
+      let translations = result[i].translations;
+
+      for (let i = 0; i < 5; i++) {
+        if (!translations[i]) {
+          translations[i] = '--------------------------';
+        }
+      }
+    }
+    res.send(result);
   } else {
     res.status(400).send('로그인 하세요');
   }
