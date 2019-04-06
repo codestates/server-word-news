@@ -107,11 +107,11 @@ router.get('/:article_id/:word', async function(req, res) {
 
 router.post('/:article_id/word', async function(req, res) {
   // 선택한 단어를 단어장에 저장하고 응답한다.
-  let { token, word, word_id, sentence_id, translation } = req.body.word;
+  let { token, word, word_id, sentence_id, translation } = req.body;
 
   let decoded = jwt.verify(token, secretObj.secret);
   let { Book, User, Book_Word, Word } = db;
-  let wordData = await Word.find({
+  let wordData = await Word.findOne({
     where: {
       id: word_id
     }
