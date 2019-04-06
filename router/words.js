@@ -2,12 +2,23 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models/index');
 
+Date.prototype.yyyymmdd = function() {
+  var mm = this.getMonth() + 1;
+  var dd = this.getDate();
+
+  return [
+    this.getFullYear(),
+    '-' + (mm > 9 ? '' : '0') + mm,
+    '-' + (dd > 9 ? '' : '0') + dd
+  ].join('');
+};
+
 router.get('/:date', async function(req, res) {
   // date에 생성된 단어 목록을 응답한다.
 
   let bookData = await db.Book.findOne({
     where: {
-      date: req.params.date
+      date: req.params.date.yyyymmdd()
     }
   });
 
