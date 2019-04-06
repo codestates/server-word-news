@@ -4,13 +4,18 @@ const router = express.Router();
 
 router.get('/', function(req, res) {
   //카테고리 목록을 응답한다
-  db.Category.findAll().then(result => {
-    if (result) {
-      res.status(200).json(result);
-    } else {
-      res.sendStatus(204);
-    }
-  });
+  db.Category.findAll()
+    .then(result => {
+      if (result) {
+        res.status(200).json(result);
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    });
 });
 
 let categoryId;
