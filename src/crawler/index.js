@@ -50,7 +50,7 @@ async function crawler() {
 
           let words = filterWords(beforeWords);
 
-          // let ngramResult = await getNgramData(words);
+          let ngramResult = await getNgramData(words);
 
           words.forEach(async word => {
             let wordData = {
@@ -59,13 +59,13 @@ async function crawler() {
               grade: 1,
               sentence_id: sentenceId
             };
-            // for (let i = 0; i < ngramResult.length; i++) {
-            //   if (ngramResult[i].ngram === word) {
-            //     let ngram = ngramResult[i].timeseries[0];
-            //     let grade = getGrade(ngram);
-            //     wordData.grade = grade;
-            //   }
-            // }
+            for (let i = 0; i < ngramResult.length; i++) {
+              if (ngramResult[i].ngram === word) {
+                let ngram = ngramResult[i].timeseries[0];
+                let grade = getGrade(ngram);
+                wordData.grade = grade;
+              }
+            }
             let wordDataIn = await db.Word.create(wordData);
           });
 

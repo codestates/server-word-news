@@ -1,8 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const db = require('../models/index');
 
-router.get('/:date', function(req, res) {
+router.get('/:date', async function(req, res) {
   // date에 생성된 단어 목록을 응답한다.
+
+  let bookData = await db.Book.findOne({
+    where: {
+      date: req.params.date
+    }
+  });
+
   res.send('get word date : ' + req.params.date);
 });
 
