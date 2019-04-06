@@ -25,7 +25,11 @@ router.post('/', function(req, res) {
   categoryId = req.body.categoryId;
   res
     .cookie('categoryId', categoryId)
-    .send('cookies.categoryId = ' + categoryId);
+    .send(categoryId)
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400);
+    });
 });
 
 module.exports = router;

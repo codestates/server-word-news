@@ -29,9 +29,14 @@ router.post('/recommends', function(req, res) {
   wordsArr.forEach(async word => {
     meaningsArr.push(getMeaning(word));
   });
-  Promise.all(meaningsArr).then(meaningsArr => {
-    res.status(200).json(meaningsArr);
-  });
+  Promise.all(meaningsArr)
+    .then(meaningsArr => {
+      res.status(200).json(meaningsArr);
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(400);
+    });
 });
 
 router.get('/:article_id', function(req, res) {
