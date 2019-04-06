@@ -18,7 +18,7 @@ router.get('/:date', function(req, res) {
     }
     res.send(' 권한 있다');
   } else {
-    res.status(500).send('로그인 하세요');
+    res.status(400).send('로그인 하세요');
   }
   // date에 맞는 test할 단어와 선지 목록을 응답한다.
   //res.send('get test date : ' + req.params.date);
