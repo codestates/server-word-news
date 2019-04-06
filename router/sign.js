@@ -18,8 +18,8 @@ router.post('/signup', function(req, res) {
     email: data.email,
     target_lang: data.target_lang,
     use_lang: data.use_lang,
-    level: parseInt(req.cookies.level),
-    category_id: parseInt(req.cookies.categoryId)
+    level: parseInt(data.level),
+    category_id: parseInt(data.categoryId)
   })
     .then(result => {
       res.status(200).send(result);
